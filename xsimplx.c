@@ -1,6 +1,5 @@
 
 /* Driver for routine simplx */
-
 #include <stdio.h>
 #define NRANSI
 #include "nr.h"
@@ -20,9 +19,6 @@ int main(void) {
 	static float c[MP][NP]=
 		{0.0,1.0,1.0,3.0,-0.5,
 		740.0,-1.0,0.0,-2.0,0.0,
-
-
-		
 		0.0,0.0,-2.0,0.0,7.0,
 		0.5,0.0,-1.0,1.0,-2.0,
 		9.0,-1.0,-1.0,-1.0,-1.0,
@@ -30,7 +26,6 @@ int main(void) {
 	float **a;
 	static char *txt[NM1M2+1]=
 		{" ","x1","x2","x3","x4","y1","y2","y3"};
-
 	izrov=ivector(1,N);
 	iposv=ivector(1,M);
 	a=convert_matrix(&c[0][0],1,MP,1,NP);

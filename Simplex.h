@@ -33,4 +33,6 @@ public:
     void simp1_tmp(); // cambiar nombre
     void simp2_tmp(); // cambiar nombre
     void simp3_tmp(); // cambiar nombre
+    void nrerror(char error_text[]); // Method to print error messages
+    float **convert_matrix(float *a, long nrl, long nrh, long ncl, long nch); // Method to convert a 1D array to a 2D array
 };

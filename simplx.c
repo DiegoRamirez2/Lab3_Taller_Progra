@@ -19,15 +19,17 @@ void simplx(float **a, int m, int n, int m1, int m2, int m3, int *icase,
 
 	if (m != (m1 + m2 + m3))
 		nrerror("Bad input constraint counts in simplx");
-	l1 = ivector(1, n + 1);
-	l3 = ivector(1, m);
-	nl1 = n;
-	for (k = 1; k <= n; k++)
+		l1 = ivector(1, n + 1);
+		l3 = ivector(1, m);
+		nl1 = n;
+	for (k = 1; k <= n; k++){
 		l1[k] = izrov[k] = k;
+	}
+		
 	for (i = 1; i <= m; i++)
-	{
+{
 		if (a[i + 1][1] < 0.0)
-			nrerror("Bad input tableau in simplx");
+			nrerror("Bad input table in simplx");
 		iposv[i] = n + i;
 	}
 	if (m2 + m3)

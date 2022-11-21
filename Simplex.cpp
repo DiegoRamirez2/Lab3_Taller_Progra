@@ -1,21 +1,18 @@
 #include "Simplex.h"
-
+#define NR_END 1
 
 // estas funciones deben sacarlas de aqui
 // todas las funciones externas deben salir
 //extern "C" int *ivector(long nl, long nh);
-extern "C" float **convert_matrix(float *a, long nrl, long nrh, long ncl, long nch);
 extern "C" void simplx(float **a, int m, int n, int m1, int m2, int m3, int *icase,int izrov[], int iposv[]);
 
 Simplex::Simplex(int m1, int m2, int m3){
 	// faltan cosas aqui
 	this->solved=false;
 }
-
 Simplex::~Simplex(){
 
 }
-
 bool Simplex::loadTxt(string filename){
 	string line;
 	// neceitamos la libreria de manejo de archivo fstream
@@ -177,3 +174,25 @@ void Simplex::simp2_tmp() {
 void Simplex::simp3_tmp() {
 
 }
+
+float **convert_matrix(float *a, long nrl, long nrh, long ncl, long nch){
+	long i,j,nrow=nrh-nrl+1,ncol=nch-ncl+1;
+	float **m;
+	/* allocate pointers to rows */
+	m=(float **) malloc((size_t) ((nrow+NR_END)*sizeof(float*)));
+	if (!m) nrerror("allocation failure in convert_matrix()");
+	m += NR_END;
+	m -= nrl;
+	/* set pointers to rows */
+	m[nrl]=a-ncl;
+	for(i=1,j=nrl+1;i<nrow;i++,j++) m[j]=m[j-1]+ncol;
+	/* return pointer to array of pointers to rows */
+	return m;
+}
+void nrerror(char error_text[]){
+	fprintf(stderr,"Numerical Recipes run-time error...\n");
+	fprintf(stderr,"%s\n", error_text);
+	fprintf(stderr,"...now exiting to system...\n");
+	exit(1);
+}
+
