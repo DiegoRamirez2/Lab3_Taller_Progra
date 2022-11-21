@@ -272,9 +272,7 @@ void free_submatrix(float **b, long nrl, long nrh, long ncl, long nch)
 	free((FREE_ARG) (b+nrl-NR_END));
 }
 
-void free_convert_matrix(float **b, long nrl, long nrh, long ncl, long nch)
-/* free a matrix allocated by convert_matrix() */
-{
+void free_convert_matrix(float **b, long nrl, long nrh, long ncl, long nch){
 	free((FREE_ARG) (b+nrl-NR_END));
 }
 

@@ -2,11 +2,17 @@ FLAGS = -g
 
 all: xsimpl test_Simplex 
 
-test_Simplex: nrutil.o simp1.o simp2.o simp3.o simplx.o Simplex.o test_Simplex.cpp
-	g++ ${FLAGS} nrutil.o simp1.o simp2.o simp3.o simplx.o Simplex.o test_Simplex.cpp -o test_Simplex
+#test_Simplex: nrutil.o simp1.o simp2.o simp3.o simplx.o Simplex.o test_Simplex.cpp
+#	g++ ${FLAGS} nrutil.o simp1.o simp2.o simp3.o simplx.o Simplex.o test_Simplex.cpp -o test_Simplex
 
-Simplex.o: Simplex.cpp Simplex.h nrutil.o simp1.o simp2.o simp3.o simplx.o
-	g++ -c Simplex.cpp
+#Simplex.o: Simplex.cpp Simplex.h nrutil.o simp1.o simp2.o simp3.o simplx.o
+#	g++ -c Simplex.cpp
+
+test_Simplex: Simplex.o test_Simplex.cpp
+	g++ ${FLAGS} -o test_Simplex Simplex.o test_Simplex.cpp
+
+Simplex.o: Simplex.cpp Simplex.h
+	g++ -c Simplex.cpp 
 
 xsimpl: nrutil.o simp1.o simp2.o simp3.o simplx.o xsimplx.c
 	gcc  -lm nrutil.o  simp1.o simp2.o simp3.o simplx.o xsimplx.c  -o xsimpl
@@ -25,9 +31,7 @@ simp2.o: simp2.c
 
 simp3.o: simp3.c
 	gcc -lm -c simp3.c
-
-
-
+	
 clean:
 	rm -f *.o xsimpl test_extern test_Simplex a.out a
 

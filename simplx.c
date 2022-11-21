@@ -9,14 +9,12 @@
 void simplx(float **a, int m, int n, int m1, int m2, int m3, int *icase,
 			int izrov[], int iposv[])
 {
-	void simp1(float **a, int mm, int ll[], int nll, int iabf, int *kp,
-			   float *bmax);
+	void simp1(float **a, int mm, int ll[], int nll, int iabf, int *kp, float *bmax);
 	void simp2(float **a, int m, int n, int *ip, int kp);
 	void simp3(float **a, int i1, int k1, int ip, int kp);
 	int i, ip, is, k, kh, kp, nl1;
 	int *l1, *l3;
 	float q1, bmax;
-
 	if (m != (m1 + m2 + m3))
 		nrerror("Bad input constraint counts in simplx");
 		l1 = ivector(1, n + 1);

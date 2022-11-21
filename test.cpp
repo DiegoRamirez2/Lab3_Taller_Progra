@@ -5,6 +5,7 @@
 using namespace std;
 
 int main(){
+    /*
     vector<vector<int> > v;
     v.push_back({1,2,3});
     v.push_back({4,5,6});
@@ -16,4 +17,7 @@ int main(){
         }
         cout << endl;
     }
+    */
+    
+    return 0;
 }

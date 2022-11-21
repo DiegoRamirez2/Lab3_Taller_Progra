@@ -8,4 +8,5 @@ int main(){
     s->loadTxt("sistema.txt");
     s->print();
     s->solve();
+    return 0;
 }

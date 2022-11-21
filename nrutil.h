@@ -52,8 +52,7 @@ double *dvector(long nl, long nh);
 float **matrix(long nrl, long nrh, long ncl, long nch);
 double **dmatrix(long nrl, long nrh, long ncl, long nch);
 int **imatrix(long nrl, long nrh, long ncl, long nch);
-float **submatrix(float **a, long oldrl, long oldrh, long oldcl, long oldch,
-	long newrl, long newcl);
+float **submatrix(float **a, long oldrl, long oldrh, long oldcl, long oldch,long newrl, long newcl);
 float **convert_matrix(float *a, long nrl, long nrh, long ncl, long nch);
 float ***f3tensor(long nrl, long nrh, long ncl, long nch, long ndl, long ndh);
 void free_vector(float *v, long nl, long nh);

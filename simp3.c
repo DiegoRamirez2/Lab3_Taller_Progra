@@ -3,7 +3,6 @@ void simp3(float **a, int i1, int k1, int ip, int kp)
 {
 	int kk,ii;
 	float piv;
-
 	piv=1.0/a[ip+1][kp+1];
 	for (ii=1;ii<=i1+1;ii++)
 		if (ii-1 != ip) {
