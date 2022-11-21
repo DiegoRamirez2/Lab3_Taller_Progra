@@ -168,7 +168,7 @@ and ncol=nch-ncl+1. The routine should be called with the address
 	float **m;
 
 	/* allocate pointers to rows */
-	m=(float **) malloc((size_t) ((nrow+NR_END)*sizeof(float*)));
+	m = (float **)malloc((size_t) ((nrow+NR_END)*sizeof(float*)));
 	if (!m) nrerror("allocation failure in convert_matrix()");
 	m += NR_END;
 	m -= nrl;

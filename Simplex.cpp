@@ -94,6 +94,7 @@ void Simplex::solve(){
 	#define MP 6        // MP >= M+2
 	*/
 	int i, icase, j, izrov[N + 1], iposv[M + 1];
+	// cout << "Iposv tiene tamaño: " << M + 1 << endl;
 	float c[MP][NP] =
 		{0.0, 1.0, 1.0, 3.0, -0.5,
 		740.0, -1.0, 0.0, -2.0, 0.0,
@@ -147,10 +148,16 @@ void Simplex::solve(){
 
 void Simplex::simplx(float **a, int m, int n, int m1_, int m2_, int m3_, int *icase,
 			int izrov[], int iposv[]){
-	int i, ip, is, k, kh, kp, nl1;
+	int i, ip, is, k, kh, kp = 0, nl1 = 0, iter = 0;
 	int *l1, *l3;
-	cout << "N es: " << n << endl;
-	cout << "M2 es: " << m2_ << endl;
+	for(i = 0; i < M + 1; i++){
+		for(int jn = 0; jn < N + 1; jn++){
+			cout << a[i][jn] << " ";
+		}
+		cout << endl;
+	}
+	// cout << "N es: " << n << endl;
+	// cout << "M2 es: " << m2_ << endl;
 	l3 = (int *)malloc(m2_ * sizeof(int));
 	l1 = (int *)malloc(n * sizeof(int));
 	float q1, bmax;
@@ -162,33 +169,38 @@ void Simplex::simplx(float **a, int m, int n, int m1_, int m2_, int m3_, int *ic
 		nl1 = n;
 	}
 	// Acá el problema es que sobrepasa el indice de l1
-	for(k = 0; k <= n; k++){
-		l1[k] = izrov[k] = k;
-		cout << "Es: " << l1[k] << endl;
+	for(k = 1; k <= n; k++){
+		l1[k-1] = izrov[k-1] = k;
+		// cout << "l1: " << l1[k-1] << endl;
+		// cout << "izrov: " << izrov[k-1] << endl;
+		// cout << "K es: " << k << endl;
 	}
 	for(i = 1; i <= m; i++){
-		if (a[i + 1][1] < 0.0){
+		// cout << "i es: " << i << endl;
+		if(i > 2){
+			if (a[i-1][1] < 0.0){
 			nrerror("Bad input table in simplx");
+			}
 		}
-		iposv[i] = n + i;
+		iposv[i - 1] = n + i;
 	}
 	if(m2_ + m3_){
 		for(i = 1; i <= m2_; i++){
-			l3[i] = 1;
-			cout << "l3 es: " << l3[i] << endl;
+			l3[i-1] = 1;
+			// cout << "l3 es: " << l3[i-1] << endl;
 		}
 		for(k = 1; k <= (n + 1); k++){
-			cout << "Entramos al for" << endl;
+			// cout << "Entramos al for" << endl;
 			q1 = 0.0;
 			for(i = m1_ + 1; i <= m; i++){
-				cout << "Entramos al for 2" << endl;
+				// cout << "Entramos al for 2" << endl;
 				q1 += a[i + 1][k];
 			}
 			a[m + 2][k] = -q1;
 		}
 		// Acá dentro está el problema
 		for(;;){
-			cout << "Entramos al for 3" << endl;
+			// cout << "Entramos al for 3" << endl;
 			simp1(a, m + 1, l1, nl1, 0, &kp, &bmax);
 			if(bmax <= EPS && a[m + 2][1] < -EPS){
 				cout << "Entramos al if" << endl;
@@ -196,10 +208,13 @@ void Simplex::simplx(float **a, int m, int n, int m1_, int m2_, int m3_, int *ic
 				FREEALL return;
 			}
 			else if(bmax <= EPS && a[m + 2][1] <= EPS){
-				cout << "Entramos al else if" << endl;
+				// cout << "Entramos al else if" << endl;
 				for(ip = m1_ + m2_ + 1; ip <= m; ip++){
 					cout << "Entramos al for 4" << endl;
-					if(iposv[ip] == (ip + n)){
+					// Esta condicion puede tener valores no inicializados
+					cout << "Ip es: " << ip << endl;
+					cout << "M es: " << m << endl;
+					if(iposv[ip - 1] == (ip + n)){
 						cout << "Entramos al if 2" << endl;
 						simp1(a, ip, l1, nl1, 1, &kp, &bmax);
 						if (bmax > EPS){
@@ -208,18 +223,24 @@ void Simplex::simplx(float **a, int m, int n, int m1_, int m2_, int m3_, int *ic
 						}
 					}
 				}
-				for(i = m1_ + 1; i <= m1_ + m2_; i++){
+				for(i = (m1_ + 1); i <= m1_ + m2_; i++){
 					cout << "Entramos al for 5" << endl;
-					if(l3[i - m1_] == 1){
+					cout << "El valor es: " <<  i - m1_ - 1 << endl;
+					if(l3[(i - m1_) - 1] == 1){
 						cout << "Entramos al if 4" << endl;
 						for(k = 1; k <= n + 1; k++){
 							cout << "Entramos al for 6" << endl;
-							a[i + 1][k] = -a[i + 1][k];
+							cout << "A es: " << a[i][k-1] << endl;
+							a[i][k-1] = -a[i][k-1];
 						}
 					}
 				}
-				break;
+				//break;
 			}
+			cout << "M es: " << m << endl;
+			cout << "N es: " << n << endl;
+			cout << "Kp es: " << kp << endl;
+			cout << "Ip es: " << ip << endl;
 			simp2(a, m, n, &ip, kp);
 			if (ip == 0){
 				*icase = -1;
@@ -229,7 +250,7 @@ void Simplex::simplx(float **a, int m, int n, int m1_, int m2_, int m3_, int *ic
 			simp3(a, m + 1, n, ip, kp);
 			if (iposv[ip] >= (n + m1_ + m2_ + 1)){
 				for(k = 1; k <= nl1; k++){
-					if(l1[k] == kp){
+					if(l1[k - 1] == kp){
 						break;
 					}
 				}
@@ -243,7 +264,7 @@ void Simplex::simplx(float **a, int m, int n, int m1_, int m2_, int m3_, int *ic
 					l3[kh] = 0;
 					++a[m + 2][kp + 1];
 					for (i = 1; i <= m + 2; i++){
-						a[i][kp + 1] = -a[i][kp + 1];
+						a[i-1][kp + 1] = -a[i-1][kp + 1];
 					}
 				}
 			}
@@ -272,7 +293,7 @@ void Simplex::simplx(float **a, int m, int n, int m1_, int m2_, int m3_, int *ic
 
 void Simplex::simp1(float **a, int mm, int ll[], int nll, int iabf, int *kp, float *bmax){
 	int k;
-	float test;
+	float test = 0.0;
 	if (nll <= 0){
 		*bmax = 0.0;
 	}else{
@@ -293,33 +314,47 @@ void Simplex::simp1(float **a, int mm, int ll[], int nll, int iabf, int *kp, flo
 }
 void Simplex::simp2(float **a, int m, int n, int *ip, int kp){
 	int k,i;
-	float qp,q0,q,q1;
+	float qp,q0,q = 0.0, q1;
 	*ip=0;
+	cout << "M es: " << m << endl;
 	for (i = 1; i <= m; i++){
-		if (a[i+1][kp+1] < -EPS){
+		cout << "Entramos al for 7" << endl;
+		cout << "El valor es: " << kp << endl;
+		cout << "El valor de i es: " << i-1  << endl;
+		if (a[i-1][kp] < -EPS){
+			cout << "Entramos a esta wea" << endl;
 			break;
 		}
 	}
 	if (i > m){
+		cout << "Entramos al if 5" << endl;
 		return;
 	}
-	q1 = -a[i+1][1]/a[i+1][kp+1];
+	q1 = -a[i][1]/a[i][kp+1];
 	*ip=i;
-	for(i=*ip+1;i<=m;i++){
+	for(i = *ip+1; i <= m; i++){
+		cout << "Entramos al for 8" << endl;
 		if(a[i+1][kp+1] < -EPS){
+			cout << "Entramos al if 6" << endl;
 			q = -a[i+1][1]/a[i+1][kp+1];
 			if(q < q1){
+				cout << "Entramos al if 7" << endl;
 				*ip=i;
 				q1=q;
-			}else if(q == q1){
+			}
+			else if(q == q1){
+				cout << "Entramos al if 8" << endl;
 				for(k=1;k<=n;k++){
-					qp = -a[*ip+1][k+1]/a[*ip+1][kp+1];
-					q0 = -a[i+1][k+1]/a[i+1][kp+1];
+					cout << "Entramos al for 9" << endl;
+					qp = -a[*ip+1][k]/a[*ip+1][kp+1];
+					q0 = -a[i+1][k]/a[i+1][kp+1];
 					if (q0 != qp){
+						cout << "Entramos al if 9" << endl;
 						break;
 					}
 				}
 				if (q0 < qp){
+					cout << "Entramos al if 10" << endl;
 					*ip=i;
 				}
 			}
@@ -351,15 +386,16 @@ void Simplex::simp3(float **a, int i1, int k1, int ip, int kp){
 float **Simplex::convert_matrix(float *a, long nrl, long nrh, long ncl, long nch){
 	long i, j, nrow = nrh - nrl + 1, ncol = nch - ncl + 1;
 	float **m;
-	m = (float **)malloc((size_t)((nrow + NR_END) * sizeof(float *)));
+	m = (float **)malloc((size_t) ((nrow + NR_END) * sizeof(float *)));
 	if (!m){
-		//nrerror("Allocation failure in convert_matrix()");
+		nrerror("Allocation failure in convert_matrix()");
 	}
 	m += NR_END;
 	m -= nrl;
 	m[nrl] = a - ncl;
-	for (i = 1, j = nrl + 1; i < nrow; i++, j++)
+	for (i = 1, j = nrl + 1; i < nrow; i++, j++){
 		m[j] = m[j - 1] + ncol;
+	}
 	return m;
 }
 void Simplex::nrerror(const char* error_text){
