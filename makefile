@@ -8,6 +8,9 @@ all: xsimpl test_Simplex
 #Simplex.o: Simplex.cpp Simplex.h nrutil.o simp1.o simp2.o simp3.o simplx.o
 #	g++ -c Simplex.cpp
 
+test_MIPS: test_MIPS.cpp MIPS.o MIPS.h Simplex.o
+	g++ ${FLAGS} -o test_MIPS test_MIPS.cpp MIPS.o Simplex.o 
+
 test_Simplex: Simplex.o test_Simplex.cpp
 	g++ ${FLAGS} -o test_Simplex Simplex.o test_Simplex.cpp
 
@@ -33,7 +36,7 @@ simp3.o: simp3.c
 	gcc -lm -c simp3.c
 	
 clean:
-	rm -f *.o xsimpl test_extern test_Simplex a.out a
+	rm -f *.o xsimpl test_extern test_Simplex test_MIPS
 
 run_all: all
 	echo "\nSimplex de C:"
